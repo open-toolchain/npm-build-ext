@@ -1,0 +1,110 @@
+{
+    "id": "ibm.devops.services.pipeline.nexus.build",
+    "version": 1,
+    "name_key": "ExtName",
+    "desc_key": "ExtDesc",
+    "extension_type": "Build",
+    "message_key": "ExtMessage",
+    "inputs": [
+        {
+            "type": "Artifacts",
+            "inclusion" : "always"
+        }
+    ],
+    "params": [
+        {
+            "name": "NEXUS_INSTANCE",
+            "type": "Text",
+            "required": false,
+            "default_value": "(default)",
+            "label_key": "NEXUS_INSTANCE_KEY",
+            "desc_key": "NEXUS_INSTANCE_DESC"
+        },
+        {
+            "name": "BUILD_TYPE",
+            "type": "Select",
+            "required": "false",
+            "default_value": "npm",
+            "label_key": "BUILD_TYPE_KEY",
+            "desc_key": "BUILD_TYPE_DESC",
+            "options": [
+                {
+                    "label_key": "NPM_KEY",
+                    "value": "npm"
+                },
+                {
+                    "label_key": "MVN_KEY",
+                    "value": "maven"
+                }
+            ]
+        },
+        {
+            "name": "BUILD_COMMAND",
+            "type": "TextArea",
+            "required": false,
+            "default_value": "#!/bin/bash\n# environment variables are available:\n# NPM_NAME: name of the service instance\n# NPM_USER_ID: userid for the npm registry\n# NPM_TOKEN: the token or password for the npm registry\n# NPM_RELEASE_URL: the private NPM registry\n# NPM_MIRROR_URL: the proxy NPM registry, used as the default NPM registry\n\nnpm install\n#npm publish --registry \"${NPM_RELEASE_URL}\"\n#npm install \"${NPM_MODULE_NAME}\"",
+            "label_key": "BUILD_COMMAND_KEY",
+            "desc_key": "BUILD_COMMAND_DESC"
+        },
+        {
+            "name": "WORKING_DIR",
+            "type": "Text",
+            "required": false,
+            "default_value": "",
+            "label_key": "WORKING_DIR_KEY",
+            "desc_key": "WORKING_DIR_DESC"
+        },
+        {
+            "name": "ARCHIVE_DIR",
+            "type": "Text",
+            "required": false,
+            "default_value": "",
+            "label_key": "ARCHIVE_DIR_KEY",
+            "desc_key": "ARCHIVE_DIR_DESC"
+        }
+    ],
+    "outputs": [
+        {
+            "type": "Artifacts",
+            "inclusion" : "always"
+        }
+    ],
+    "execution": {
+        "type": "JenkinsDocker",
+        "shell": "#!/bin/bash
+set +x
+set +e
+
+export TOOLCHAIN_TOKEN PIPELINE_TOOLCHAIN_ID
+export NEXUS_INSTANCE=#NEXUS_INSTANCE#
+
+. $EXT_DIR/_init.sh
+
+# get toolchain services
+$EXT_DIR/get-service-instances.sh
+
+#generate NPM environment variables from Nexus service instance
+node $EXT_DIR/generate-npm.js >/tmp/npm.txt
+if [ ! -s /tmp/npm.txt ]; then
+    echo \"Error, no npm nexus card available\"
+    exit 1
+fi
+. /tmp/npm.txt
+
+#create .npmrc file and ignore pipeline scripts
+$EXT_DIR/create-npmrc.sh
+
+# version is a user problem
+# $EXT_DIR/update-package-version.sh
+
+#set up directories
+cd #WORKING_DIR#
+export ARCHIVE_DIR=#ARCHIVE_DIR#
+#BUILD_COMMAND#
+
+"
+    }
+    },
+    "project": "https://hub.jazz.net/project/idsorg/otc-cti-broker",
+    "project_contact": "pwebster@ca.ibm.com"
+}
