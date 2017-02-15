@@ -28,11 +28,6 @@ if (npm_si) {
     console.log('export NPM_TOKEN="' + token + '"');
 }
 
-var pkg = JSON.parse(fs.readFileSync('package.json'));
-if (pkg) {
-    console.log('export NPM_MODULE_NAME="' + pkg.name + '"');
-}
-
 function findServiceInstance(services, suffix) {
     var nexus = services.filter(function (v) {
         return v.service_id === 'nexus'

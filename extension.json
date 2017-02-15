@@ -85,6 +85,10 @@ export TMP_WORKING_DIR=\"#WORKING_DIR#\"
 
 # get toolchain services
 $EXT_DIR/get-service-instances.sh
+if [ $? -ne 0 ]; then
+    echo \"Failed to load toolchain\"
+    exit 1
+fi
 
 #generate NPM environment variables from Nexus service instance
 node $EXT_DIR/generate-npm.js >/tmp/npm.txt
@@ -93,6 +97,11 @@ if [ ! -s /tmp/npm.txt ]; then
     exit 1
 fi
 . /tmp/npm.txt
+
+node $EXT_DIR/generate-npm-module.js >/tmp/npm_mod.txt
+. /tmp/npm_mod.txt
+
+
 
 #create .npmrc file and ignore pipeline scripts
 $EXT_DIR/create-npmrc.sh
@@ -111,6 +120,12 @@ fi
 
 
 #BUILD_COMMAND#
+if [ $? -ne 0 ]; then
+    echo \"Failed during execution of build command\"
+    exit 1
+fi
+
+
 
 "
     }
