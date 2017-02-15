@@ -10,12 +10,12 @@
 var fs = require('fs'); 
 var services = JSON.parse(fs.readFileSync('/tmp/tc_services.json')).services; 
 
-var npm_mirror = findServiceInstance('npm-mirror');
+var npm_mirror = findServiceInstance(services, 'npm-mirror');
 if (npm_mirror) {
     console.log('export NPM_MIRROR_URL="' + npm_mirror.dashboard_url + '"');
 }
 
-var npm_si = findServiceInstance('-npm');
+var npm_si = findServiceInstance(services, '-npm');
 if (npm_si) {
     var name = npm_si.parameters.name,
         url = npm_si.parameters.dashboard_url,
@@ -33,7 +33,7 @@ if (pkg) {
     console.log('export NPM_MODULE_NAME="' + pkg.name + '"');
 }
 
-function findServiceInstance(suffix) {
+function findServiceInstance(services, suffix) {
     var nexus = services.filter(function (v) {
         return v.service_id === 'nexus'
             && v.parameters && v.parameters.name
