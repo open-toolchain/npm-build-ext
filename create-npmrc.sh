@@ -16,7 +16,7 @@ email=$NPM_USER_ID
 _auth=$NPM_TOKEN
 EOF
 
-if [ ! -z "${NPM_MIRROR_URL}"]; then
+if [ ! -z "${NPM_MIRROR_URL}" ]; then
 
 cat - >>$HOME/.npmrc <<EOF
 registry=$NPM_MIRROR_URL
