@@ -76,7 +76,10 @@ set +x
 set +e
 
 export TOOLCHAIN_TOKEN PIPELINE_TOOLCHAIN_ID
-export NEXUS_INSTANCE=#NEXUS_INSTANCE#
+export NEXUS_INSTANCE=\"#NEXUS_INSTANCE#\"
+export TMP_ARCHIVE_DIR=\"#ARCHIVE_DIR#\"
+export TMP_WORKING_DIR=\"#WORKING_DIR#\"
+
 
 . $EXT_DIR/_init.sh
 
@@ -98,8 +101,15 @@ $EXT_DIR/create-npmrc.sh
 # $EXT_DIR/update-package-version.sh
 
 #set up directories
-cd #WORKING_DIR#
-export ARCHIVE_DIR=#ARCHIVE_DIR#
+export ARCHIVE_DIR=.
+if [ ! -z \"$TMP_ARCHIVE_DIR\"]; then
+    export ARCHIVE_DIR=\"$TMP_ARCHIVE_DIR\"
+fi
+if [ ! -z \"$TMP_WORKING_DIR\"]; then
+    cd \"$TMP_WORKING_DIR\"
+fi
+
+
 #BUILD_COMMAND#
 
 "
