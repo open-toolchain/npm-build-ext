@@ -13,7 +13,7 @@ var services = JSON.parse(fs.readFileSync(process.env.SERVICE_INSTANCE_FILE)).se
 var npm_service = findServiceInstance(services, process.env.SERVICE_INSTANCE_TYPE, process.env.SERVICE_INSTANCE);
 if (npm_service) {
     var id = npm_service.parameters.name,
-        url = npm_service.parameters.dashboard_url,
+        url = npm_service.parameters.release_url,
         mirror_url = npm_service.parameters.mirror_url,
         snapshot_url = npm_service.parameters.snapshot_url,
         user_id = npm_service.parameters.user_id,
