@@ -116,7 +116,7 @@ node $EXT_DIR/generate-npm-module.js >/tmp/npm_mod.txt
 $EXT_DIR/create-npmrc.sh
 
 # Update version if requested
-if #INC_SNAPSHOT#; then
+if [ \"#INC_SNAPSHOT#\" = true ]; then
     $EXT_DIR/update-package-version.sh
 fi
 
