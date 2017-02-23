@@ -19,7 +19,7 @@ var versions = JSON.parse(fs.readFileSync(process.env.VER_INFO));
 
 var pkg_version = JSON.parse(fs.readFileSync('package.json')).version;
 
-console.log(pkg_version);
+//console.log(pkg_version);
 var maj = semver.major(pkg_version),
     min = semver.minor(pkg_version),
     micro = semver.patch(pkg_version),
