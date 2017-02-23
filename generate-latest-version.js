@@ -14,10 +14,12 @@
  ********************************************************************************/
 
 var fs = require('fs'),
-    semver = require('semver');
+    semver = require('semver'),
+    target = 'package.json';
 var versions = JSON.parse(fs.readFileSync(process.env.VER_INFO));
 
-var pkg_version = JSON.parse(fs.readFileSync('package.json')).version;
+var pkg  = JSON.parse(fs.readFileSync(target)),
+    pkg_version = pkg.version;
 
 console.log('pkg:'+pkg_version);
 var maj = semver.major(pkg_version),
@@ -34,9 +36,13 @@ var range = '>=' + pkg_version + ' <' + rel_version;
 
 versions.push(pkg_version);
 
-var max_version = semver.maxSatisfying(versions, range);
+var max_version = semver.maxSatisfying(versions, range),
+    inc_version = semver.inc(max_version, 'prerelease', 'SNAPSHOT');
 console.log('max: ' + max_version);
 
 
-console.log('inc:' + semver.inc(max_version, 'prerelease', 'SNAPSHOT'));
+console.log('inc:' + inc_version);
 
+pkg.version = inc_version;
+
+fs.writeFileSync(target, JSON.stringify(pkg, null, 2), 'utf-8');
