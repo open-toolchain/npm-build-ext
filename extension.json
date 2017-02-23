@@ -47,6 +47,14 @@
             "desc_key": "BUILD_COMMAND_DESC"
         },
         {
+            "name": "INC_SNAPSHOT",
+            "type": "Checkbox",
+            "required": "true",
+            "default_value": "false",
+            "label_key": "INC_SNAPSHOT_KEY",
+            "desc_key": "INC_SNAPSHOT_DESC"
+        },
+        {
             "name": "WORKING_DIR",
             "type": "Text",
             "required": false,
@@ -107,8 +115,10 @@ node $EXT_DIR/generate-npm-module.js >/tmp/npm_mod.txt
 #create .npmrc file and ignore pipeline scripts
 $EXT_DIR/create-npmrc.sh
 
-# version is a user problem
-# $EXT_DIR/update-package-version.sh
+# Update version if requested
+if #INC_SNAPSHOT#; then
+    $EXT_DIR/update-package-version.sh
+fi
 
 #set up directories
 export ARCHIVE_DIR=.

@@ -1,16 +1,26 @@
 #!/bin/bash
-# Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2017. All Rights Reserved.
+
+#*******************************************************************************
+# Copyright 2017 IBM
 #
-# Note to U.S. Government Users Restricted Rights:
-# Use, duplication or disclosure restricted by GSA ADP Schedule
-# Contract with IBM Corp.
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#*******************************************************************************
 
 
 # get latest version
-npm view "${NPM_MODULE_NAME}" dist-tags.latest --registry "${NEXUS_URL}" >/tmp/ver_info.txt
+npm view --json "${NPM_MODULE_NAME}" versions --registry "${NPM_MIRROR_URL}" >"${VER_INFO}"
 ( cd $EXT_DIR ; npm install semver )
 NEW_VER=$( node $EXT_DIR/generate-latest-version.js )
 
-sed -i 's/"version".*:[^,]*,/"version": "'${NEW_VER}'",/g' package.json
-
+if [ ! -z "${NEW_VER}" ]; then
+    sed -i 's/"version".*:[^,]*,/"version": "'${NEW_VER}'",/g' package.json
+fi

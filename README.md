@@ -1,2 +1,2 @@
-# Nexus Build
-## (Experimental) IDS extension to build using a Nexus repository.
+# NPM Build
+## IDS extension to build using a Nexus or Artifactory repository.
