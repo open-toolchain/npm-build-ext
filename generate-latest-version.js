@@ -19,7 +19,7 @@ var versions = JSON.parse(fs.readFileSync(process.env.VER_INFO));
 
 var pkg_version = JSON.parse(fs.readFileSync('package.json')).version;
 
-//console.log(pkg_version);
+console.log('pkg:'+pkg_version);
 var maj = semver.major(pkg_version),
     min = semver.minor(pkg_version),
     micro = semver.patch(pkg_version),
@@ -35,8 +35,8 @@ var range = '>=' + pkg_version + ' <' + rel_version;
 versions.push(pkg_version);
 
 var max_version = semver.maxSatisfying(versions, range);
-//console.log('max version: ' + max_version);
+console.log('max: ' + max_version);
 
 
-console.log(semver.inc(max_version, 'prerelease', 'SNAPSHOT'));
+console.log('inc:' + semver.inc(max_version, 'prerelease', 'SNAPSHOT'));
 

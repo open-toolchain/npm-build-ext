@@ -19,7 +19,10 @@
 # get latest version
 npm view --json "${NPM_MODULE_NAME}" versions --registry "${NPM_MIRROR_URL}" >"${VER_INFO}"
 ( cd $EXT_DIR ; npm install semver )
-NEW_VER=$( node $EXT_DIR/generate-latest-version.js )
+node $EXT_DIR/generate-latest-version.js >/tmp/t1
+cat /tmp/t1
+
+NEW_VER=$( grep inc: /tmp/t1 | cut -f2 -d: )
 
 if [ ! -z "${NEW_VER}" ]; then
     sed -i 's/"version".*:[^,]*,/"version": "'${NEW_VER}'",/g' package.json
