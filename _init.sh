@@ -50,7 +50,7 @@ else
 fi 
 
 export PATH=/opt/IBM/node-v4.6.0/bin:$PATH
-npm install -f npm@3.8.0
+npm install -g npm@3.8.0
 
 export SERVICE_INSTANCE_FILE=/tmp/tc_services.json
 export VER_INFO=/tmp/ver_info.json
