@@ -16,7 +16,7 @@
 var fs = require('fs'),
     semver = require('semver'),
     target = 'package.json';
-var versions = JSON.parse(fs.readFileSync(process.env.VER_INFO));
+
 
 var pkg  = JSON.parse(fs.readFileSync(target)),
     pkg_version = pkg.version;
@@ -32,15 +32,23 @@ if (semver.eq(pkg_version, rel_version)) {
     return;
 }
 
+var versions = [];
+if (fs.existsSync(process.env.VER_INFO)) {
+    versions = JSON.parse(fs.readFileSync(process.env.VER_INFO));
+}
+
+if (typeof versions === 'string') {
+    versions = [ versions ];
+}
+
 var range = '>=' + pkg_version + ' <' + rel_version;
 
 versions.push(pkg_version);
 
 var max_version = semver.maxSatisfying(versions, range),
     inc_version = semver.inc(max_version, 'prerelease', 'SNAPSHOT');
+
 console.log('max: ' + max_version);
-
-
 console.log('inc:' + inc_version);
 
 pkg.version = inc_version;
