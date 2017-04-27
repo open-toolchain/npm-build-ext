@@ -35,8 +35,6 @@ debugme() {
 sudo apt-get update &> /dev/null
 sudo apt-get -y install curl &> /dev/null
 
-
-
 set +e
 set +x
 
@@ -52,6 +50,8 @@ fi
 export PATH=/opt/IBM/node-v4.6.0/bin:$PATH
 npm install -g npm@3.8.0
 
-export TOOLCHAINS_API=$( echo $PIPELINE_API_URL | sed 's/pipeline/toolchains/g' )
+export DOMAIN=$( echo $PIPELINE_API_URL | sed 's!^.*//\([^/]*\)/.*$!\1!g' | sed 's!^[^.]*!!g' )
+export TOOLCHAINS_API=https://devops-api${DOMAIN}/v1/toolchains
+
 export SERVICE_INSTANCE_FILE=/tmp/tc_services.json
 export VER_INFO=/tmp/ver_info.json
