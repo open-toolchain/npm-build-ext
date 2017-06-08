@@ -122,10 +122,10 @@ fi
 
 #set up directories
 export ARCHIVE_DIR=.
-if [ ! -z \"$TMP_ARCHIVE_DIR\"]; then
+if [ ! -z \"$TMP_ARCHIVE_DIR\" ]; then
     export ARCHIVE_DIR=\"$TMP_ARCHIVE_DIR\"
 fi
-if [ ! -z \"$TMP_WORKING_DIR\"]; then
+if [ ! -z \"$TMP_WORKING_DIR\" ]; then
     cd \"$TMP_WORKING_DIR\"
 fi
 
