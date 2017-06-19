@@ -39,10 +39,18 @@
             ]
         },
         {
+            "name": "SONAR_SERVICE_INSTANCE",
+            "type": "Text",
+            "required": false,
+            "default_value": "(default)",
+            "label_key": "SONAR_SERVICE_INSTANCE_KEY",
+            "desc_key": "SONAR_SERVICE_INSTANCE_DESC"
+        },
+        {
             "name": "BUILD_COMMAND",
             "type": "TextArea",
             "required": false,
-            "default_value": "#!/bin/bash\n# environment variables are available:\n# NPM_NAME: name of the service instance\n# NPM_USER_ID: userid for the npm registry\n# NPM_TOKEN: the token or password for the npm registry\n# NPM_RELEASE_URL: the private NPM registry\n# NPM_MIRROR_URL: the proxy NPM registry, used as the default NPM registry\n# NPM_MODULE_NAME: the module name of the package.json at the root of the workspace if available.\n\nnpm install\n#npm publish --registry \"${NPM_RELEASE_URL}\"\n#npm install \"${NPM_MODULE_NAME}\"",
+            "default_value": "#!/bin/bash\n# environment variables are available:\n# NPM_NAME: name of the service instance\n# NPM_USER_ID: userid for the npm registry\n# NPM_TOKEN: the token or password for the npm registry\n# NPM_RELEASE_URL: the private NPM registry\n# NPM_MIRROR_URL: the proxy NPM registry, used as the default NPM registry\n# NPM_MODULE_NAME: the module name of the package.json at the root of the workspace if available.\n# SONAR_INSTANCE_NAME: the name of the SonarQube instance\n# SONAR_SERVER_URL: the url of the SonarQube server\n# SONAR_USER_ID: SonarQube user name\n# SONAR_USER_TOKEN: SonarQube password or authentication token\n\nnpm install\n#npm publish --registry \"${NPM_RELEASE_URL}\"\n#npm install \"${NPM_MODULE_NAME}\"",
             "label_key": "BUILD_COMMAND_KEY",
             "desc_key": "BUILD_COMMAND_DESC"
         },
@@ -106,6 +114,12 @@ if [ ! -s /tmp/npm.txt ]; then
     exit 1
 fi
 . /tmp/npm.txt
+
+# generate sonar environment variables from #SONAR_SERVICE_INSTANCE# service instance
+node $EXT_DIR/generate-sonar-env.js >/tmp/sonar.txt
+if [ -s /tmp/sonar.txt ]; then
+. /tmp/sonar.txt
+fi
 
 node $EXT_DIR/generate-npm-module.js >/tmp/npm_mod.txt
 . /tmp/npm_mod.txt
