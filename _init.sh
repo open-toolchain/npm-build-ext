@@ -54,3 +54,6 @@ export TOOLCHAINS_API=https://$( echo $IDS_URL | sed 's!^.*//\([^/]*\)/.*$!\1!g'
 
 export SERVICE_INSTANCE_FILE=/tmp/tc_services.json
 export VER_INFO=/tmp/ver_info.json
+# sonarQube requires a 1.8 JVM
+export JAVA_HOME=/opt/IBM/java8
+export PATH=$JAVA_HOME/bin:$PATH
