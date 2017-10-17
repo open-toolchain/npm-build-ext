@@ -15,12 +15,15 @@
 #   See the License for the specific language governing permissions and
 #*******************************************************************************
 
-cat - >>$HOME/.npmrc <<EOF
+if [ -z "${NPM_USER_ID}" ]; then
+NPM_USER_ID=$(echo $NPM_TOKEN | base64 -d | cut -d ':' -f 1)
+fi
+
+cat - >$HOME/.npmrc <<EOF
 always-auth=true
 EOF
 
 cat - >>$HOME/.npmrc <<EOF
-# $NPM_NAME
 email=$NPM_USER_ID
 _auth=$NPM_TOKEN
 EOF
